@@ -184,8 +184,8 @@ public:
 
   uint8_t get_type();
 
-  virtual NameToken* as_name_token();
-  virtual const NameToken* as_name_token() const;
+  NameToken* as_name_token();
+  const NameToken* as_name_token() const;
 };
 
 class PunctuationToken : public StringToken
