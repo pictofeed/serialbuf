@@ -63,6 +63,13 @@ typedef enum : uint8_t
 } LexerIntegerTypes;
 
 class Lexer;
+
+class StringToken;
+class LiteralToken;
+class NumberToken;
+class NameToken;
+class PunctuationToken;
+
 class LexerToken
 {
 public:
@@ -76,6 +83,21 @@ public:
   size_t get_end_pos();
 
   virtual uint8_t get_type();
+
+  virtual StringToken* as_string_token();
+  virtual const StringToken* as_string_token() const;
+
+  virtual LiteralToken* as_literal_token();
+  virtual const LiteralToken* as_literal_token() const;
+
+  virtual NumberToken* as_number_token();
+  virtual const NumberToken* as_number_token() const;
+
+  virtual NameToken* as_name_token();
+  virtual const NameToken* as_name_token() const;
+
+  virtual PunctuationToken* as_punctuation_token();
+  virtual const PunctuationToken* as_punctuation_token() const;
 
 protected:
   const Lexer *lexer_ = nullptr;
@@ -92,6 +114,9 @@ public:
 
   virtual uint8_t get_type();
 
+  StringToken* as_string_token();
+  const StringToken* as_string_token() const;
+
   void set_value(std::string value);
   std::string get_value();
 
@@ -105,6 +130,9 @@ public:
   using StringToken::StringToken;
 
   uint8_t get_type();
+
+  LiteralToken* as_literal_token();
+  const LiteralToken* as_literal_token() const;
 };
 
 class NumberToken : public LexerToken
@@ -113,6 +141,9 @@ public:
   using LexerToken::LexerToken;
 
   uint8_t get_type();
+
+  NumberToken* as_number_token();
+  const NumberToken* as_number_token() const;
 
   void set_is_negative(bool is_negative);
   bool get_is_negative();
@@ -152,6 +183,9 @@ public:
   using StringToken::StringToken;
 
   uint8_t get_type();
+
+  virtual NameToken* as_name_token();
+  virtual const NameToken* as_name_token() const;
 };
 
 class PunctuationToken : public StringToken
@@ -160,6 +194,9 @@ public:
   using StringToken::StringToken;
 
   uint8_t get_type();
+
+  PunctuationToken* as_punctuation_token();
+  const PunctuationToken* as_punctuation_token() const;
 };
 
 class Lexer

@@ -63,6 +63,56 @@ uint8_t LexerToken::get_type()
   throw std::runtime_error("Must override get_type() by a class that inherits from LexerToken!");
 }
 
+StringToken* LexerToken::as_string_token()
+{
+  return nullptr;
+}
+
+const StringToken* LexerToken::as_string_token() const
+{
+  return nullptr;
+}
+
+LiteralToken* LexerToken::as_literal_token()
+{
+  return nullptr;
+}
+
+const LiteralToken* LexerToken::as_literal_token() const
+{
+  return nullptr;
+}
+
+NumberToken* LexerToken::as_number_token()
+{
+  return nullptr;
+}
+
+const NumberToken* LexerToken::as_number_token() const
+{
+  return nullptr;
+}
+
+NameToken* LexerToken::as_name_token()
+{
+  return nullptr;
+}
+
+const NameToken* LexerToken::as_name_token() const
+{
+  return nullptr;
+}
+
+PunctuationToken* LexerToken::as_punctuation_token()
+{
+  return nullptr;
+}
+
+const PunctuationToken* LexerToken::as_punctuation_token() const
+{
+  return nullptr;
+}
+
 StringToken::~StringToken()
 {
   value_.clear();
@@ -71,6 +121,16 @@ StringToken::~StringToken()
 uint8_t StringToken::get_type()
 {
   return LEXER_TOKEN_STRING;
+}
+
+StringToken* StringToken::as_string_token()
+{
+  return this;
+}
+
+const StringToken* StringToken::as_string_token() const
+{
+  return this;
 }
 
 void StringToken::set_value(std::string value)
@@ -88,9 +148,29 @@ uint8_t LiteralToken::get_type()
   return LEXER_TOKEN_LITERAL;
 }
 
+LiteralToken* LiteralToken::as_literal_token()
+{
+  return this;
+}
+
+const LiteralToken* LiteralToken::as_literal_token() const
+{
+  return this;
+}
+
 uint8_t NumberToken::get_type()
 {
   return LEXER_TOKEN_NUMBER;
+}
+
+NumberToken* NumberToken::as_number_token()
+{
+  return this;
+}
+
+const NumberToken* NumberToken::as_number_token() const
+{
+  return this;
 }
 
 void NumberToken::set_is_negative(bool is_negative)
@@ -291,9 +371,29 @@ uint8_t NameToken::get_type()
   return LEXER_TOKEN_NAME;
 }
 
+NameToken* NameToken::as_name_token()
+{
+  return this;
+}
+
+const NameToken* NameToken::as_name_token() const
+{
+  return this;
+}
+
 uint8_t PunctuationToken::get_type()
 {
   return LEXER_TOKEN_PUNCTUATION;
+}
+
+PunctuationToken* PunctuationToken::as_punctuation_token()
+{
+  return this;
+}
+
+const PunctuationToken* PunctuationToken::as_punctuation_token() const
+{
+  return this;
 }
 
 Lexer::Lexer(std::istringstream &stream)
