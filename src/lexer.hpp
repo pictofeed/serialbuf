@@ -253,7 +253,7 @@ public:
   float get_float() const;
   double get_double() const;
 
-protected:
+private:
   bool is_negative_ = false;
   bool is_floating_point_ = false;
   uint8_t *value_ = nullptr;
@@ -297,10 +297,10 @@ public:
   void set_current_offset(size_t current_offset);
   size_t get_current_offset();
 
-  const NumberToken* read_number();
-  const StringToken* read_string();
-  const NameToken* read_name();
-  const LexerToken* read();
+  virtual const NumberToken* read_number();
+  virtual const StringToken* read_string();
+  virtual const NameToken* read_name();
+  virtual const LexerToken* read();
 
 protected:
   std::istringstream &stream_;
