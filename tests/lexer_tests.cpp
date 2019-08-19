@@ -67,7 +67,7 @@ TEST(LexerTests, parse_string_token_double_quote)
   delete token;
 }
 
-TEST(LexerTests, parse_string_token_name)
+TEST(LexerTests, parse_token_name)
 {
   std::istringstream stream("some_random_token_name");
   Lexer lexer(stream);
