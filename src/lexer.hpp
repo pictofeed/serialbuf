@@ -29,11 +29,14 @@
 #include <cstdlib>
 #include <cstdint>
 #include <cstring>
+#include <cfloat>
 #include <cctype>
+#include <cfloat>
 
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <limits>
 
 typedef enum : uint8_t
 {
@@ -62,6 +65,64 @@ typedef enum : uint8_t
   LEXER_INT_DOUBLE
 } LexerIntegerTypes;
 
+inline uint8_t get_int_type(int64_t value)
+{
+  if (value >= std::numeric_limits<int8_t>::min() && value <= std::numeric_limits<int8_t>::max())
+  {
+    return LEXER_INT_INT8;
+  }
+  else if (value >= std::numeric_limits<int16_t>::min() && value <= std::numeric_limits<int16_t>::max())
+  {
+    return LEXER_INT_INT16;
+  }
+  else if (value >= std::numeric_limits<int32_t>::min() && value <= std::numeric_limits<int32_t>::max())
+  {
+    return LEXER_INT_INT32;
+  }
+  else if (value >= std::numeric_limits<int64_t>::min() && value <= std::numeric_limits<int64_t>::max())
+  {
+    return LEXER_INT_INT64;
+  }
+
+  throw std::runtime_error("Failed to get signed integer type!");
+}
+
+inline uint8_t get_uint_type(uint64_t value)
+{
+  if (value <= std::numeric_limits<uint8_t>::max())
+  {
+    return LEXER_INT_UINT8;
+  }
+  else if (value <= std::numeric_limits<uint16_t>::max())
+  {
+    return LEXER_INT_UINT16;
+  }
+  else if (value <= std::numeric_limits<uint32_t>::max())
+  {
+    return LEXER_INT_UINT32;
+  }
+  else if (value <= std::numeric_limits<uint64_t>::max())
+  {
+    return LEXER_INT_UINT64;
+  }
+
+  throw std::runtime_error("Failed to get unsigned integer type!");
+}
+
+inline uint8_t get_floating_point_type(double value)
+{
+  if (value >= std::numeric_limits<float>::min() && value <= std::numeric_limits<float>::max())
+  {
+    return LEXER_INT_FLOAT;
+  }
+  else if (value >= std::numeric_limits<double>::min() && value <= std::numeric_limits<double>::max())
+  {
+    return LEXER_INT_DOUBLE;
+  }
+
+  throw std::runtime_error("Failed to get floating point integer type!");
+}
+
 class Lexer;
 
 class StringToken;
@@ -82,7 +143,7 @@ public:
   size_t get_begin_pos();
   size_t get_end_pos();
 
-  virtual uint8_t get_type();
+  virtual uint8_t get_type() const;
 
   virtual StringToken* as_string_token();
   virtual const StringToken* as_string_token() const;
@@ -112,13 +173,13 @@ public:
   using LexerToken::LexerToken;
   virtual ~StringToken();
 
-  virtual uint8_t get_type();
+  virtual uint8_t get_type() const;
 
   StringToken* as_string_token();
   const StringToken* as_string_token() const;
 
   void set_value(std::string value);
-  std::string get_value();
+  std::string get_value() const;
 
 protected:
   std::string value_ = "";
@@ -129,7 +190,7 @@ class LiteralToken : public StringToken
 public:
   using StringToken::StringToken;
 
-  uint8_t get_type();
+  uint8_t get_type() const;
 
   LiteralToken* as_literal_token();
   const LiteralToken* as_literal_token() const;
@@ -140,41 +201,63 @@ class NumberToken : public LexerToken
 public:
   using LexerToken::LexerToken;
 
-  uint8_t get_type();
+  uint8_t get_type() const;
 
   NumberToken* as_number_token();
   const NumberToken* as_number_token() const;
 
   void set_is_negative(bool is_negative);
-  bool get_is_negative();
+  bool get_is_negative() const;
 
   void set_is_floating_point(bool is_floating_point);
-  bool get_is_floating_point();
+  bool get_is_floating_point() const;
 
+  void clear();
+  void size(size_t size);
+
+  void set_value(int8_t value);
+  void set_value(uint8_t value);
+
+  void set_value(int16_t value);
+  void set_value(uint16_t value);
+
+  void set_value(int32_t value);
+  void set_value(uint32_t value);
+
+  void set_value(int64_t value);
   void set_value(uint64_t value);
-  uint64_t get_value();
 
-  uint8_t get_integer_type();
+  void set_value(float value);
+  void set_value(double value);
 
-  int8_t get_int8();
-  uint8_t get_uint8();
+  void set_compact_value(int64_t value);
+  void set_compact_value(uint64_t value);
 
-  int16_t get_int16();
-  uint16_t get_uint16();
+  void set_compact_value(double value);
 
-  int32_t get_int32();
-  uint32_t get_uint32();
+  uint8_t* get_value() const;
+  uint8_t get_value_type() const;
 
-  int64_t get_int64();
-  uint64_t get_uint64();
+  int8_t get_int8() const;
+  uint8_t get_uint8() const;
 
-  float get_float();
-  double get_double();
+  int16_t get_int16() const;
+  uint16_t get_uint16() const;
+
+  int32_t get_int32() const;
+  uint32_t get_uint32() const;
+
+  int64_t get_int64() const;
+  uint64_t get_uint64() const;
+
+  float get_float() const;
+  double get_double() const;
 
 protected:
   bool is_negative_ = false;
   bool is_floating_point_ = false;
-  uint64_t value_ = 0;
+  uint8_t *value_ = nullptr;
+  uint8_t value_type_ = 0;
 };
 
 class NameToken : public StringToken
@@ -182,7 +265,7 @@ class NameToken : public StringToken
 public:
   using StringToken::StringToken;
 
-  uint8_t get_type();
+  uint8_t get_type() const;
 
   NameToken* as_name_token();
   const NameToken* as_name_token() const;
@@ -193,7 +276,7 @@ class PunctuationToken : public StringToken
 public:
   using StringToken::StringToken;
 
-  uint8_t get_type();
+  uint8_t get_type() const;
 
   PunctuationToken* as_punctuation_token();
   const PunctuationToken* as_punctuation_token() const;
@@ -214,6 +297,9 @@ public:
   void set_current_offset(size_t current_offset);
   size_t get_current_offset();
 
+  const NumberToken* read_number();
+  const StringToken* read_string();
+  const NameToken* read_name();
   const LexerToken* read();
 
 protected:
