@@ -38,6 +38,8 @@
 #include <sstream>
 #include <limits>
 
+#include "utils.hpp"
+
 typedef enum : uint8_t
 {
   LEXER_TOKEN_STRING = 0,

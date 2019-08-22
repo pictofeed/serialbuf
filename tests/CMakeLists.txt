@@ -24,6 +24,7 @@
 # along with SerialBuf. If not, see <https://opensource.org/licenses/MIT>.
 
 set(SERIALBUF_UNITTESTS_SOURCE_FILES
+  buffer_tests.cpp
   lexer_tests.cpp
   main.cpp
 )

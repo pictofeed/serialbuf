@@ -24,10 +24,13 @@
 # along with SerialBuf. If not, see <https://opensource.org/licenses/MIT>.
 
 set(SERIALBUF_SOURCE_FILES
+  buffer.cpp
   lexer.cpp
 )
 
 set(SERIALBUF_HEADER_FILES
+  utils.hpp
+  buffer.hpp
   lexer.hpp
 )
 
