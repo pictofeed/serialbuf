@@ -63,8 +63,8 @@ public:
   void set_offset(size_t offset);
   size_t get_offset() const;
 
-  bool compare(const Buffer *other_buffer) const;
   void copy(Buffer *other_buffer);
+  bool compare(const Buffer *other_buffer) const;
 
   void resize(size_t size);
   void write(const uint8_t *data, size_t size);
@@ -128,8 +128,8 @@ public:
   void copy(BufferIterator *other_buffer_iterator);
   bool compare(const BufferIterator *other_buffer_iterator) const;
 
-  size_t get_remaining_size();
-  const uint8_t* get_remaining_data();
+  size_t get_remaining_size() const;
+  const uint8_t* get_remaining_data() const;
 
   uint8_t* read(size_t size);
   void skip_read(size_t size);

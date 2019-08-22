@@ -113,15 +113,6 @@ size_t Buffer::get_offset() const
   return offset_;
 }
 
-bool Buffer::compare(const Buffer *other_buffer) const
-{
-  assert(other_buffer != nullptr);
-  return (
-    memcmp(data_, other_buffer->get_data(), size_) == 0 &&
-    size_ == other_buffer->get_size() &&
-    offset_ == other_buffer->get_offset());
-}
-
 void Buffer::copy(Buffer *other_buffer)
 {
   assert(other_buffer != nullptr);
@@ -133,6 +124,15 @@ void Buffer::copy(Buffer *other_buffer)
   // copy our contents to the other buffer
   other_buffer->set_data(data_, size_);
   other_buffer->set_offset(offset_);
+}
+
+bool Buffer::compare(const Buffer *other_buffer) const
+{
+  assert(other_buffer != nullptr);
+  return (
+    memcmp(data_, other_buffer->get_data(), size_) == 0 &&
+    size_ == other_buffer->get_size() &&
+    offset_ == other_buffer->get_offset());
 }
 
 void Buffer::resize(size_t size)
@@ -427,12 +427,12 @@ bool BufferIterator::compare(const BufferIterator *other_buffer_iterator) const
     offset_ == other_buffer_iterator->get_offset());
 }
 
-size_t BufferIterator::get_remaining_size()
+size_t BufferIterator::get_remaining_size() const
 {
   return buffer_->get_size() - offset_;
 }
 
-const uint8_t* BufferIterator::get_remaining_data()
+const uint8_t* BufferIterator::get_remaining_data() const
 {
   return buffer_->get_data() + offset_;
 }
